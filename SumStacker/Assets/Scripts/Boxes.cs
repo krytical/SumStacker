@@ -11,8 +11,8 @@ public class Boxes : MonoBehaviour
 
     private bool canMove = true;
 
-    void Start()
-    {
+    void Start() 
+    { 
         // check if game over
         if (!isValidPosition())
         {
@@ -62,6 +62,7 @@ public class Boxes : MonoBehaviour
             {
                 transform.position += new Vector3(0, 1, 0);
                 Grid.deleteCompleteRowsAndDrop();
+				FindObjectOfType<GameController>().blockNum++;
                 FindObjectOfType<SpawnBox>().SpawnNewBox();
                 enabled = false;
             }
