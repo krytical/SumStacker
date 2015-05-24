@@ -57,9 +57,8 @@ public class Grid : MonoBehaviour
 		{
 			if (correctRowSum(y))
 			{
-				print ("FUCK YEAH");
-				//DeleteRow(y);
-				// RowDownAll(y + 1);
+				DeleteRow(y);
+				RowDownAll(y + 1);
 				--y;
 			}
 		}
