@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour {
 	public GameObject[] boxPrefabs;
 	
 	public float spawnDelay = 3f;
-	float nextSpawn = 1f;
+	public float nextSpawn = 1f;
 	
 	public float initialVelocity = 2f;
 
