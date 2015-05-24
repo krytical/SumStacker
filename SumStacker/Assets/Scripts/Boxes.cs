@@ -7,6 +7,8 @@ public class Boxes : MonoBehaviour {
 	public static int gridWeight = 20;
 	public static int gridHeight = 40;
 	public static Transform[,] grid = new Transform[gridWeight, gridHeight];
+	public int currenttotal = 0;
+	public static int goaltotal = 10;
 	
 
 	void Start () {
@@ -104,9 +106,21 @@ public class Boxes : MonoBehaviour {
 		return true;
 	}
 
-	public static void DeleteRow() {
+	public bool equalsTotal(int y) {
+		for (int x = 0; x < gridWeight; ++x)
+			currenttotal++; //adds the total of the box values at grid[x, y]
+		if (currenttotal == goaltotal) {
+			currenttotal = 0;
+			return true;
+		} else {
+			currenttotal = 0;
+			return false;
+		}
+	}
+
+	public void DeleteRow() {
 		for (int y = 0; y < gridHeight; ++y) {
-			if (isFull(y)) {
+			if (isFull(y) && equalsTotal(y)) {
 				Delete(y);
 				RowDownAll(y+1);
 				--y;
