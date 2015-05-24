@@ -54,7 +54,7 @@ public class Boxes : MonoBehaviour
 				} else {
 					transform.position += new Vector3 (0, 1, 0);
 					if (transform.position.y > 8){
-						Application.LoadLevel(0);
+						Application.LoadLevel("End");
 					}
 					Grid.deleteCompleteRowsAndDrop ();
 					Grid.deleteCompleteColsAndDrop ();
