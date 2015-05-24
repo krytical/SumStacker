@@ -4,23 +4,25 @@ using System.Collections;
 public class Boxes : MonoBehaviour {
 
 	float fall = 0;
-	public static int gridWeight = 20;
-	public static int gridHeight = 40;
+	public static int gridWeight = 5;
+	public static int gridHeight = 8;
 	public static Transform[,] grid = new Transform[gridWeight, gridHeight];
 	public int currenttotal = 0;
 	public static int goaltotal = 10;
-	
+
+	private bool canMove = true;
 
 	void Start () {
 		if (!isValidPosition()) {
 			Application.LoadLevel(0);
 			Destroy(gameObject);
 		}
+		canMove = true;
 	}
 
 	void Update() {
 		
-		if (Input.GetKeyDown(KeyCode.RightArrow)) {
+		if (Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.D)) {
 			transform.position += new Vector3(1, 0, 0);
 
 			if (isValidPosition())
@@ -29,24 +31,24 @@ public class Boxes : MonoBehaviour {
 				transform.position += new Vector3(-1, 0, 0);
 		}
 
-		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+		else if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.A)) {
 			transform.position += new Vector3(-1, 0, 0);
 			if (isValidPosition())
 					GridUpdate();
 			else
 				transform.position += new Vector3(1, 0, 0);
 		}
-
+		/*
 		else if (Input.GetKeyDown(KeyCode.UpArrow)) {
 			transform.Rotate(0, 0, -90);
 			if (isValidPosition())
 				GridUpdate();
 			else
 				transform.Rotate(0, 0, 90);
-		}
+		}*/
 
 		else if (Input.GetKeyDown(KeyCode.DownArrow) ||
-		         Time.time - fall >= 1) {
+		         Time.time - fall >= 1 || Input.GetKeyDown(KeyCode.S)) {
 			transform.position += new Vector3(0, -1, 0);
 			if (isValidPosition()) {
 				GridUpdate();
@@ -61,16 +63,19 @@ public class Boxes : MonoBehaviour {
 		}
 	}
 
-	bool isValidPosition() {        
-		foreach (Transform child in transform) {
-			Vector2 v = round(child.position);
-			if (!isInsideGrid(v))
-				return false;
-			if (grid[(int)v.x, (int)v.y] != null &&
-			    grid[(int)v.x, (int)v.y].parent != transform)
-				return false;
+	bool isValidPosition() { 
+		if (canMove) {
+			foreach (Transform child in transform) {
+				Vector2 v = round (child.position);
+				if (!isInsideGrid (v))
+					return false;
+				if (grid [(int)v.x, (int)v.y] != null &&
+					grid [(int)v.x, (int)v.y].parent != transform)
+					return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	void GridUpdate() {
@@ -141,5 +146,13 @@ public class Boxes : MonoBehaviour {
 	public static void RowDownAll(int y) {
 		for (int i = y; i < gridHeight; ++i)
 			RowDown(i);
+	}
+
+	void OnCollisionEnter2D(Collision2D coll) {
+		canMove = false;
+		
+	}
+	void OnTriggerEnter2D(Collider2D other) {
+		canMove = false;
 	}
 }
