@@ -46,6 +46,20 @@ public class Boxes : MonoBehaviour
 				} else
 					transform.position += new Vector3 (1, 0, 0);
 			}
+			else if(Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)){
+				Boxes[] boxArray = FindObjectsOfType(typeof(Boxes)) as Boxes[];
+				foreach(Boxes b in boxArray){
+					if(b.isHeld){
+						Vector2 v = round(transform.position);
+						grid[(int)v.x, (int)v.y] = b.transform;
+						b.transform.position = round(transform.position);
+						transform.position = new Vector3 (7, 0, 0);
+						b.isHeld = false;
+						isHeld = true;
+						break;
+					}
+				}
+			}
         //DOWN KEY
         else if (Input.GetKeyDown (KeyCode.DownArrow) ||
 				Time.time - fall >= 1 || Input.GetKeyDown (KeyCode.S)) {
@@ -55,7 +69,7 @@ public class Boxes : MonoBehaviour
 					UpdateBlock (vOld);
 				} else {
 					transform.position += new Vector3 (0, 1, 0);
-					Grid.deleteCompleteRowsAndDrop ();
+					//Grid.deleteCompleteRowsAndDrop ();
 					FindObjectOfType<GameController> ().blockNum++;
 					FindObjectOfType<SpawnBox> ().SpawnNewBox ();
 					enabled = false;
@@ -65,20 +79,7 @@ public class Boxes : MonoBehaviour
 			} else if (Input.GetKeyUp (KeyCode.LeftArrow) || Input.GetKeyUp (KeyCode.A) ||
 				Input.GetKeyUp (KeyCode.RightArrow) || Input.GetKeyUp (KeyCode.D)) {
 				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = false;
-			} else if(Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)){
-			Boxes[] boxArray = FindObjectsOfType(typeof(Boxes)) as Boxes[];
-			foreach(Boxes b in boxArray){
-				if(b.isHeld){
-					Vector2 v = round(transform.position);
-					grid[(int)v.x, (int)v.y] = b.transform;
-					b.transform.position = round(transform.position);
-					transform.position = new Vector3 (7, 0, 0);
-					b.isHeld = false;
-					isHeld = true;
-					break;
-				}
-			}
-		}
+			} 
 	}
 
     }
