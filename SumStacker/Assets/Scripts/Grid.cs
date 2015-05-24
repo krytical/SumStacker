@@ -28,6 +28,17 @@ public class Grid : MonoBehaviour
 			}
 		}
 	}
+
+	public static void DeleteCol(int x)
+	{
+		for (int y = 0; y < gridWeight; ++y)
+		{
+			if (grid[x,y] != null) {
+				Destroy(grid[x, y].gameObject);
+				grid[x, y] = null;
+			}
+		}
+	}
 	
 	// Drops all objects in a row
 	public static void RowDown(int y)
@@ -63,7 +74,20 @@ public class Grid : MonoBehaviour
 			}
 		}
 	}
-	
+
+	public static void deleteCompleteColsAndDrop()
+	{;
+		for (int x = 0; x < gridWeight; ++x)
+		{
+			if (correctColSum(x))
+			{
+				DeleteCol(x);
+				RowDownAll(x + 1);
+				--x;
+			}
+		}
+	}
+
 	// Checks if row sums up to correct value
 	public static bool correctRowSum(int y) //TODO make this work
 	{		
@@ -85,4 +109,25 @@ public class Grid : MonoBehaviour
 			return false;
 		}
 	}
+
+	public static bool correctColSum(int x) //TODO make this work
+		{		
+			int currenttotal = 0;
+			for (int y = 0; y < gridWeight; y++)
+			{
+				if (grid[x,y] != null){
+					GameObject currbox = grid[x,y].gameObject;
+					rowBoxValue = currbox.GetComponent<Boxes>().boxValues;
+					currenttotal += rowBoxValue;
+				}
+			}
+			if (currenttotal == goaltotal)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 }

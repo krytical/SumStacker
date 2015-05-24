@@ -54,6 +54,7 @@ public class Boxes : MonoBehaviour
 				} else {
 					transform.position += new Vector3 (0, 1, 0);
 					Grid.deleteCompleteRowsAndDrop ();
+					Grid.deleteCompleteColsAndDrop ();
 					FindObjectOfType<GameController> ().blockNum++;
 					FindObjectOfType<SpawnBox> ().SpawnNewBox ();
 					enabled = false;
