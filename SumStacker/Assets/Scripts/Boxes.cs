@@ -53,6 +53,9 @@ public class Boxes : MonoBehaviour
 					UpdateBlock (vOld);
 				} else {
 					transform.position += new Vector3 (0, 1, 0);
+					if (transform.position.y > 8){
+						Application.LoadLevel(0);
+					}
 					Grid.deleteCompleteRowsAndDrop ();
 					FindObjectOfType<GameController> ().blockNum++;
 					FindObjectOfType<SpawnBox> ().SpawnNewBox ();
