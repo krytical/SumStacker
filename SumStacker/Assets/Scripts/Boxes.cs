@@ -25,50 +25,45 @@ public class Boxes : MonoBehaviour
     void Update()
     {
         //RIGHT KEY
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            Vector2 vOld = round(transform.position);
-            transform.position += new Vector3(1, 0, 0);
-            if (isValidPosition())
-            {
-                UpdateBlock(vOld);
-            }
-            else
-                transform.position += new Vector3(-1, 0, 0);
-        }
+        if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.D)) {
+			Vector2 vOld = round (transform.position);
+			transform.position += new Vector3 (1, 0, 0);
+			if (isValidPosition ()) {
+				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
+				UpdateBlock (vOld);
+			} else
+				transform.position += new Vector3 (-1, 0, 0);
+		}
         //LEFT KEY
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            Vector2 vOld = round(transform.position);
-            transform.position += new Vector3(-1, 0, 0);
-            if (isValidPosition())
-            {
-                UpdateBlock(vOld);
-            }
-            else
-                transform.position += new Vector3(1, 0, 0);
-        }
+        else if (Input.GetKeyDown (KeyCode.LeftArrow) || Input.GetKeyDown (KeyCode.A)) {
+			Vector2 vOld = round (transform.position);
+			transform.position += new Vector3 (-1, 0, 0);
+			if (isValidPosition ()) {
+				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
+				UpdateBlock (vOld);
+			} else
+				transform.position += new Vector3 (1, 0, 0);
+		}
         //DOWN KEY
-        else if (Input.GetKeyDown(KeyCode.DownArrow) ||
-                Time.time - fall >= 1 || Input.GetKeyDown(KeyCode.S))
-        {
-            Vector2 vOld = round(transform.position);
-            transform.position += new Vector3(0, -1, 0);
-            if (isValidPosition())
-            {
-                UpdateBlock(vOld);
-            }
-            else
-            {
-                transform.position += new Vector3(0, 1, 0);
-                Grid.deleteCompleteRowsAndDrop();
-                FindObjectOfType<GameController>().blockNum++;
-                FindObjectOfType<SpawnBox>().SpawnNewBox();
-                enabled = false;
-            }
+        else if (Input.GetKeyDown (KeyCode.DownArrow) ||
+			Time.time - fall >= 1 || Input.GetKeyDown (KeyCode.S)) {
+			Vector2 vOld = round (transform.position);
+			transform.position += new Vector3 (0, -1, 0);
+			if (isValidPosition ()) {
+				UpdateBlock (vOld);
+			} else {
+				transform.position += new Vector3 (0, 1, 0);
+				Grid.deleteCompleteRowsAndDrop ();
+				FindObjectOfType<GameController> ().blockNum++;
+				FindObjectOfType<SpawnBox> ().SpawnNewBox ();
+				enabled = false;
+			}
 
-            fall = Time.time;
-        }
+			fall = Time.time;
+		} else if (Input.GetKeyUp (KeyCode.LeftArrow) || Input.GetKeyUp (KeyCode.A) ||
+		           Input.GetKeyUp (KeyCode.RightArrow) || Input.GetKeyUp (KeyCode.D)){
+			GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
+		}
     }
 
     // Moves a block to a new position
