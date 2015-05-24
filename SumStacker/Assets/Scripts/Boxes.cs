@@ -6,15 +6,16 @@ public class Boxes : MonoBehaviour
 
     float fall = 0;
     public static int gridWeight = 5;
-    public static int gridHeight = 8;
+    public static int gridHeight = 10;
     public static Transform[,] grid = new Transform[gridWeight, gridHeight];
+	public bool isHeld = false;
 
     //private bool canMove = true;
 
     void Start()
     {
         // check if game over
-        if (!isValidPosition())
+		if (!isValidPosition()  && !isHeld)
         {
             Application.LoadLevel(0);
             Destroy(gameObject);
@@ -24,46 +25,62 @@ public class Boxes : MonoBehaviour
 
     void Update()
     {
-        //RIGHT KEY
-        if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.D)) {
-			Vector2 vOld = round (transform.position);
-			transform.position += new Vector3 (1, 0, 0);
-			if (isValidPosition ()) {
-				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
-				UpdateBlock (vOld);
-			} else
-				transform.position += new Vector3 (-1, 0, 0);
-		}
+		if (!isHeld) {
+			//RIGHT KEY
+			if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.D)) {
+				Vector2 vOld = round (transform.position);
+				transform.position += new Vector3 (1, 0, 0);
+				if (isValidPosition ()) {
+					GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
+					UpdateBlock (vOld);
+				} else
+					transform.position += new Vector3 (-1, 0, 0);
+			}
         //LEFT KEY
         else if (Input.GetKeyDown (KeyCode.LeftArrow) || Input.GetKeyDown (KeyCode.A)) {
-			Vector2 vOld = round (transform.position);
-			transform.position += new Vector3 (-1, 0, 0);
-			if (isValidPosition ()) {
-				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
-				UpdateBlock (vOld);
-			} else
-				transform.position += new Vector3 (1, 0, 0);
-		}
+				Vector2 vOld = round (transform.position);
+				transform.position += new Vector3 (-1, 0, 0);
+				if (isValidPosition ()) {
+					GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = true;
+					UpdateBlock (vOld);
+				} else
+					transform.position += new Vector3 (1, 0, 0);
+			}
         //DOWN KEY
         else if (Input.GetKeyDown (KeyCode.DownArrow) ||
-			Time.time - fall >= 1 || Input.GetKeyDown (KeyCode.S)) {
-			Vector2 vOld = round (transform.position);
-			transform.position += new Vector3 (0, -1, 0);
-			if (isValidPosition ()) {
-				UpdateBlock (vOld);
-			} else {
-				transform.position += new Vector3 (0, 1, 0);
-				Grid.deleteCompleteRowsAndDrop ();
-				FindObjectOfType<GameController> ().blockNum++;
-				FindObjectOfType<SpawnBox> ().SpawnNewBox ();
-				enabled = false;
-			}
+				Time.time - fall >= 1 || Input.GetKeyDown (KeyCode.S)) {
+				Vector2 vOld = round (transform.position);
+				transform.position += new Vector3 (0, -1, 0);
+				if (isValidPosition ()) {
+					UpdateBlock (vOld);
+				} else {
+					transform.position += new Vector3 (0, 1, 0);
+					Grid.deleteCompleteRowsAndDrop ();
+					FindObjectOfType<GameController> ().blockNum++;
+					FindObjectOfType<SpawnBox> ().SpawnNewBox ();
+					enabled = false;
+				}
 
-			fall = Time.time;
-		} else if (Input.GetKeyUp (KeyCode.LeftArrow) || Input.GetKeyUp (KeyCode.A) ||
-		           Input.GetKeyUp (KeyCode.RightArrow) || Input.GetKeyUp (KeyCode.D)){
-			GameObject.Find("Main Camera").GetComponent<AudioSource>().enabled = false;
+				fall = Time.time;
+			} else if (Input.GetKeyUp (KeyCode.LeftArrow) || Input.GetKeyUp (KeyCode.A) ||
+				Input.GetKeyUp (KeyCode.RightArrow) || Input.GetKeyUp (KeyCode.D)) {
+				GameObject.Find ("Main Camera").GetComponent<AudioSource> ().enabled = false;
+			} else if(Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)){
+			Boxes[] boxArray = FindObjectsOfType(typeof(Boxes)) as Boxes[];
+			foreach(Boxes b in boxArray){
+				if(b.isHeld){
+					Vector2 v = round(transform.position);
+					grid[(int)v.x, (int)v.y] = b.transform;
+					b.transform.position = round(transform.position);
+					transform.position = new Vector3 (7, 0, 0);
+					b.isHeld = false;
+					isHeld = true;
+					break;
+				}
+			}
 		}
+	}
+
     }
 
     // Moves a block to a new position

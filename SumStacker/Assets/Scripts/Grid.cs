@@ -5,7 +5,7 @@ public class Grid : MonoBehaviour
 {
 
     public static int gridWeight = 5;
-    public static int gridHeight = 8;
+    public static int gridHeight = 10;
     public static int goaltotal = 10;
     public static Transform[,] grid = new Transform[gridWeight, gridHeight];
 
